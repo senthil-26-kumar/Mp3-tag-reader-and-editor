@@ -1,0 +1,65 @@
+MP3 TAG READER AND EDITOR
+========================
+
+PROJECT OVERVIEW
+----------------
+The MP3 Tag Reader and Editor is a application developed to read and
+modify the metadata stored in an MP3 file. It supports ID3v2.3 tags and allows the
+user to view or update details such as the song title, artist, album, year, genre
+and comment.
+
+
+1. main() FUNCTION
+------------------
+- The main() function controls the program using command-line arguments received
+  through argc and argv.
+- It checks the arguments entered by the user and displays the appropriate usage
+  message when the required arguments are missing or invalid.
+- When the user enters -h, it calls help() to display the available commands.
+- For the -v option, it checks the MP3 filename and calls view() to display the
+  tag information.
+- For the -e option, it checks the edit arguments and filename, then calls edit()
+  with the selected field, new value and MP3 filename.
+
+
+2. help() FUNCTION
+------------------
+- The help() function displays the commands supported by the application.
+- It explains that -v is used to view the metadata of an MP3 file and -e is used
+  to edit its metadata.
+- It lists the available edit options: -t for title, -a for artist, -A for album,
+  -y for year, -m for genre and -c for comment.
+- The options are displayed in a simple, formatted menu so the user can refer to
+  the correct command while running the program.
+
+
+3. view() FUNCTION
+------------------
+- The view() function opens the given MP3 file in binary read mode and checks
+  whether it contains a valid ID3 header with version 2.3.
+- It reads the ID3 tag size and converts the four-byte big-endian value into an
+  integer to determine how much tag data needs to be processed.
+- It reads the frames one by one, extracting each frame's ID, size, flags and
+  data. Memory is allocated dynamically to store the frame data.
+- Based on the frame ID, it identifies and stores the title, artist, album, year,
+  genre and comment in their respective character arrays.
+- After processing the frames, it displays the collected details in a formatted
+  output and closes the MP3 file.
+
+
+4. edit() FUNCTION
+------------------
+- The edit() function opens the original MP3 file in binary read mode and creates
+  a temporary file to write the updated contents.
+- It checks the selected edit option and maps it to the corresponding ID3 frame
+  ID, then validates the ID3 header and version before processing the file.
+- It reads the existing frames and searches for the frame selected by the user.
+  When the matching frame is found, it prepares the new text data and calculates
+  the updated frame size.
+- It updates the total tag size to account for the changed frame. The selected
+  frame is written with the new value, while all other frames are copied without
+  modification.
+- After processing the tag, it copies the remaining audio data to the temporary
+  file and writes the updated tag size at the correct position in the header.
+- Finally, it closes both files and renames the temporary file to the original
+  MP3 filename. A success or error message is displayed based on the result.
